@@ -14,6 +14,17 @@ logging.basicConfig(level=logging.INFO)
 
 # Helper to get environment variables for sensitive information
 def get_env_var(var_name):
+    """Retrieve the value of an environment variable.
+
+    Args:
+        var_name (str): The name of the environment variable.
+
+    Returns:
+        str: The value of the environment variable.
+
+    Exits:
+        sys.exit(1) if the variable is not set.
+    """
     value = os.getenv(var_name)
     if not value:
         logging.error(f"Environment variable {var_name} is not set.")
@@ -82,7 +93,7 @@ def copy_data_to_other_postgres(engine, df, table_name, timestamp_column):
     try:
         row_count = len(df)
         df.to_sql(table_name, engine, if_exists='append', index=False)
-        logging.info(f"Copied {row_count} rows to {table_name}.")
+        logging.info("Copied %d rows to %s.", row_count, table_name)
 
         # Check max timestamp after copy
         max_timestamp = get_latest_timestamp(engine, table_name, timestamp_column)
